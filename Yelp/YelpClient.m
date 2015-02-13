@@ -26,7 +26,8 @@
     NSDictionary *defaults = @{@"term": term, @"ll" : @"37.774866,-122.394556"};
     
     NSMutableDictionary *allParameters = [defaults mutableCopy];
-    if (params ) {µ
+    
+    if (params ) {
         [allParameters addEntriesFromDictionary:params];
     }
     

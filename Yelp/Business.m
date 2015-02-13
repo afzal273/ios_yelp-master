@@ -14,17 +14,34 @@
     self = [super init];
     
     if (self) {
+        // categories is an array of arrays,
+        //only want the first element of each inner array
         NSArray *categories = dictionary[@"categories"];
         NSMutableArray *categoryNames = [NSMutableArray array];
         [categories enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [categoryNames addObject:obj[0]];
         }];
-        self.categories = [categories componentsJoinedByString:@", "];
+        self.categories = [categoryNames componentsJoinedByString:@", "];
         self.name = dictionary[@"name"];
         self.imageUrl = dictionary[@"image_url"];
-        NSString *street = [dictionary valueForKeyPath:@"location.address"][0];
         NSString *neighborhood = [dictionary valueForKeyPath:@"location.neighborhoods"][0];
-        self.address = [NSString stringWithFormat:@"%@,%@", street, neighborhood];
+        NSString *street;
+        
+        if ( [[dictionary valueForKeyPath:@"location.address"]count] > 0){
+                street = [dictionary valueForKeyPath:@"location.address"][0];
+        }
+
+        NSString *city = [dictionary valueForKeyPath:@"location.city"];
+        
+        if (neighborhood ==  nil && street == nil){
+            self.address = [NSString stringWithFormat:@"%@", city];
+        } else if (neighborhood ==  nil) {
+            self.address = [NSString stringWithFormat:@"%@, %@", street, city];
+        } else if (street ==  nil) {
+            self.address = [NSString stringWithFormat:@"%@, %@", neighborhood, city];
+        } else {
+            self.address = [NSString stringWithFormat:@"%@, %@", street, neighborhood];
+        }
         self.numReviews = [dictionary[@"review_count"] integerValue];
         self.ratingImageUrl = dictionary[@"rating_img_url"];
         float milesPerMeter = 0.000621371;

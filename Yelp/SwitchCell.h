@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+// forward declaration
 @class SwitchCell;
 
 @protocol SwitchCellDelegate <NSObject>

@@ -102,8 +102,9 @@
 }
 
 - (void) onCancelButton {
+
+  //  [self.delegate filtersViewController:self didChangeFilters:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
-    
     
 }
 

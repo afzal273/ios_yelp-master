@@ -22,7 +22,7 @@
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="0.07mi" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="omB-Sv-IJN">
                         <rect key="frame" x="280" y="10" width="32" height="12"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <fontDescription key="fontDescription" type="italicSystem" pointSize="10"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -38,8 +38,8 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thai, Seafood, Salad" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yo5-jR-1Yx">
-                        <rect key="frame" x="87" y="63" width="98" height="12"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thai, Seafood, Salad" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yo5-jR-1Yx">
+                        <rect key="frame" x="87" y="63" width="225" height="12"/>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
@@ -87,6 +87,7 @@
                     <constraint firstItem="4j5-fh-Cpv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="nzM-ys-Dpk"/>
                     <constraint firstItem="yo5-jR-1Yx" firstAttribute="leading" secondItem="4j5-fh-Cpv" secondAttribute="trailing" constant="8" id="p71-RZ-i6j"/>
                     <constraint firstItem="mHN-h9-wfA" firstAttribute="leading" secondItem="4j5-fh-Cpv" secondAttribute="trailing" constant="8" id="wqV-Dm-9Bk"/>
+                    <constraint firstAttribute="trailing" secondItem="yo5-jR-1Yx" secondAttribute="trailing" constant="8" id="x0K-MO-LFJ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
