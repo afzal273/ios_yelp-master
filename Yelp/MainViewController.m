@@ -11,6 +11,8 @@
 #import "Business.h"
 #import "BusinessCell.h"
 #import "FiltersViewController.h"
+#import "SVProgressHUD.h"
+#import "SVPullToRefresh.h"
 
 NSString * const kYelpConsumerKey = @"vxKwwcR_NMQ7WaEiQBK_CA";
 NSString * const kYelpConsumerSecret = @"33QCvh5bIF5jIHR5klQr7RtBDhQ";
@@ -39,6 +41,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
         // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
         self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
         
+
         [self fetchBusinessesWithQuery:@"Restaurants" params:nil];
 
     }
@@ -49,11 +52,13 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    [self showLoadingHUD];
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 
-//    self.searchBar.di
+
     
     // Teach the table view about the cell
     
@@ -68,8 +73,23 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     self.navigationItem.titleView = self.searchBar;
     self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     self.navigationController.navigationBar.barTintColor = [UIColor redColor];
+  
+    
+//    [self.tableView addInfiniteScrollingWithActionHandler:^{
+//        // append data to data source, insert new cells at the end of table view
+//        
+//        [self.tableView.infiniteScrollingView stopAnimating];
+//    }];
     
     
+//    [self.tableView triggerInfiniteScrolling];
+
+//    UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+//    UIActivityIndicatorView *loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    [loadingView startAnimating];
+//    loadingView.center = tableFooterView.center;
+//    [tableFooterView addSubview:loadingView];
+//    self.tableView.tableFooterView = tableFooterView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -91,6 +111,10 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     NSLog(@"Search button clicked");
     //    NSString *test = [self.searchBar.text];
     NSString *query = self.searchBar.text;
+    [SVProgressHUD show];
+    [SVProgressHUD setBackgroundColor:[UIColor redColor]];
+    [SVProgressHUD showWithStatus:@"Loading"];
+    
     [self fetchBusinessesWithQuery:query params:nil];
     //    [self ]
     [searchBar setShowsCancelButton:NO];
@@ -124,7 +148,17 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     
     //the cell itself knows how to configure the business
     cell.business = self.businesses[indexPath.row];
+    
+//    if (indexPath.row == self.businesses.count){
+//        NSLog(@"entering last cell");
+//        [self fetchBusinessesWithQuery:@"Restaurants" params:nil];
+//        [tableView reloadData];
+//    }
+   
+    
+    
     return cell;
+    
     
     
  }
@@ -133,7 +167,9 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
 - (void)filtersViewController:(FiltersViewController *)filtersViewController didChangeFilters:(NSDictionary *)filters {
     //fire a network event
+    [self showLoadingHUD];
     [self fetchBusinessesWithQuery:@"Restaurants" params:filters];
+
     //NSLog(@"Fire new network event: %@", filters);
 }
 
@@ -142,10 +178,12 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
 - (void) fetchBusinessesWithQuery: (NSString *)query params: (NSDictionary*)params {
     
+    
     [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
        // NSLog(@"response %@", response);
         NSArray *businessDictionaries = response[@"businesses"];
         self.businesses = [Business businessesWithDictionaies:businessDictionaries];
+            [SVProgressHUD dismiss];
         [self.tableView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
@@ -162,6 +200,12 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [self presentViewController:nvc animated:YES completion:nil];
 }
 
+- (void) showLoadingHUD {
+    [SVProgressHUD show];
+    [SVProgressHUD setBackgroundColor:[UIColor redColor]];
+    [SVProgressHUD showWithStatus:@"Loading"];
+    
+}
 
 
 

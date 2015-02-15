@@ -80,8 +80,8 @@ NSInteger numRowsForCategories = 4;
     
     if([defaults objectForKey:@"savedSelectedSort"] != nil){
         NSLog(@"Trying inside saved sort");
-        NSData *data1 = [defaults objectForKey:@"savedSelectedSort"];
-        self.selectedSort = [NSKeyedUnarchiver unarchiveObjectWithData:data1];
+        NSData *data = [defaults objectForKey:@"savedSelectedSort"];
+        self.selectedSort = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         NSLog(@"%@", self.selectedSort);
     }
     
@@ -158,11 +158,13 @@ NSInteger numRowsForCategories = 4;
     
     switch (section) {
         case 0:
+
+            NSLog(@"in the selected sort now");
+              NSLog(@"%@", self.selectedSort);
+            NSLog(@"%@, %ld", contents, [indexPath row]);
             cell.on = [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]];
             NSLog(@"output of cell.on is %d", [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]]);
-            NSLog(@"in the selected sort now");
-          //  NSLog(@"%@", self.selectedSort);
-            NSLog(@"%@, %ld", contents, [indexPath row]);
+
         case 1:
             cell.on = [self.selectedRadius containsObject:[contents objectAtIndex:[indexPath row]]];
         case 2:
@@ -375,17 +377,21 @@ NSInteger numRowsForCategories = 4;
 //    }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.selectedCategories];
-    [defaults setObject:data forKey:@"savedSelectedCategories"];
+
     
-    NSData *data1 = [NSKeyedArchiver archivedDataWithRootObject:self.selectedSort];
-    [defaults setObject:data1 forKey:@"savedSelectedSort"];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.selectedSort];
+    [defaults setObject:data forKey:@"savedSelectedSort"];
     
     data = [NSKeyedArchiver archivedDataWithRootObject:self.selectedRadius];
     [defaults setObject:data forKey:@"savedSelectedRadius"];
     
     data = [NSKeyedArchiver archivedDataWithRootObject:self.selectedDeal];
     [defaults setObject:data forKey:@"savedSelectedDeal"];
+    
+    data = [NSKeyedArchiver archivedDataWithRootObject:self.selectedCategories];
+    [defaults setObject:data forKey:@"savedSelectedCategories"];
+    
+    [defaults synchronize];
     
     //[defaults setObject:defaultAllSelectedCategories forKey:@"savedSelectedCategories"];
     
@@ -398,7 +404,7 @@ NSInteger numRowsForCategories = 4;
     
 //    [defaults setObject:self.selectedSort forKey:@"savedSortFilter"];
     
-    [defaults synchronize];
+
     [self.delegate filtersViewController:self didChangeFilters:self.filters];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
