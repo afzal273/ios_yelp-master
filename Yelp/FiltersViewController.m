@@ -17,9 +17,9 @@ NSInteger numRowsForCategories = 4;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *categories;
 @property (nonatomic, strong) NSMutableSet *selectedCategories;
-@property (nonatomic, strong) NSMutableArray *selectedSort;
-@property (nonatomic, strong) NSMutableArray *selectedRadius;
-@property (nonatomic, strong) NSMutableArray *selectedDeal;
+@property (nonatomic, strong) NSMutableSet *selectedSort;
+@property (nonatomic, strong) NSMutableSet *selectedRadius;
+@property (nonatomic, strong) NSMutableSet *selectedDeal;
 //@property (nonatomic, strong) NSString *selectedSortType;
 //@property (nonatomic, strong) NSString *selectedRadiusType;
 //@property (nonatomic, strong) NSString *selectedDealsType;
@@ -41,8 +41,10 @@ NSInteger numRowsForCategories = 4;
         self.title = @"Filters";
         self.selectedCategories = [NSMutableSet set];
 
-        self.selectedRadius = [NSMutableArray array];
-        self.selectedDeal = [NSMutableArray array];
+        self.selectedRadius = [NSMutableSet set];
+        self.selectedDeal = [NSMutableSet set];
+        self.selectedSort = [NSMutableSet set];
+        
         self.isExpandedSection = [NSMutableDictionary dictionary];
         
 
@@ -67,13 +69,39 @@ NSInteger numRowsForCategories = 4;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"SwitchCell" bundle:nil] forCellReuseIdentifier:@"SwitchCell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"DefaultCell"];
-  
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults synchronize];
-    for (id category in [defaults objectForKey:@"savedSelectedCategories"]) {
-        [self.selectedCategories addObject:category];
+    if([defaults objectForKey:@"savedSelectedCategories"] != nil){
+        NSData *data = [defaults objectForKey:@"savedSelectedCategories"];
+        self.selectedCategories = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        
     }
-    self.selectedSort = [NSMutableArray arrayWithObject:[defaults objectForKey:@"savedSortFilter"]];
+    
+    if([defaults objectForKey:@"savedSelectedSort"] != nil){
+        NSLog(@"Trying inside saved sort");
+        NSData *data1 = [defaults objectForKey:@"savedSelectedSort"];
+        self.selectedSort = [NSKeyedUnarchiver unarchiveObjectWithData:data1];
+        NSLog(@"%@", self.selectedSort);
+    }
+    
+    if([defaults objectForKey:@"savedSelectedRadius"] != nil){
+        NSData *data = [defaults objectForKey:@"savedSelectedRadius"];
+        self.selectedRadius = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    
+    if([defaults objectForKey:@"savedSelectedDeal"] != nil){
+        NSData *data = [defaults objectForKey:@"savedSelectedDeal"];
+        self.selectedDeal = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    
+  
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults synchronize];
+//    for (id category in [defaults objectForKey:@"savedSelectedCategories"]) {
+//        [self.selectedCategories addObject:category];
+//    }
+//    self.selectedSort = [NSMutableArray arrayWithObject:[defaults objectForKey:@"savedSortFilter"]];
     
 //    [categories enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 //        [categoryNames addObject:obj[0]];
@@ -131,12 +159,20 @@ NSInteger numRowsForCategories = 4;
     switch (section) {
         case 0:
             cell.on = [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]];
+            NSLog(@"output of cell.on is %d", [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]]);
+            NSLog(@"in the selected sort now");
+          //  NSLog(@"%@", self.selectedSort);
+            NSLog(@"%@, %ld", contents, [indexPath row]);
         case 1:
             cell.on = [self.selectedRadius containsObject:[contents objectAtIndex:[indexPath row]]];
         case 2:
             cell.on = [self.selectedDeal containsObject:[contents objectAtIndex:[indexPath row]]];
         case 3:
             cell.on = [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]];
+            NSLog(@"in the selected categories now");
+            NSLog(@"output of cell.on in categories is %d", [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]]);
+        //    NSLog(@"%@", self.selectedCategories);
+          //  NSLog(@"%@, %ld", contents, [indexPath row]);
             
         default:
             break;
@@ -196,7 +232,7 @@ NSInteger numRowsForCategories = 4;
             
             
         } else {
-            
+            [self.selectedSort removeObject:[contents objectAtIndex:[indexPath row]]];
         }
         
     } else if ([key isEqualToString:@"Distance"]) {
@@ -233,6 +269,7 @@ NSInteger numRowsForCategories = 4;
         
     } else if ([key isEqualToString:@"Categories"]) {
         if (value) {
+            NSLog(@"Flipping switch in sort by");
             NSLog(@"Selected categories are %@ and trying to add to it %@",self.selectedCategories, [contents objectAtIndex:[indexPath row]]);
             [self.selectedCategories addObject:[contents objectAtIndex:[indexPath row]]];
             //    NSLog(@"%ld, %ld, %@",[indexPath section],[indexPath row], );
@@ -331,12 +368,26 @@ NSInteger numRowsForCategories = 4;
 
 - (void) onApplyButton {
     
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSMutableArray *defaultAllSelectedCategories = [[NSMutableArray alloc]init];
+//    for (id category in self.selectedCategories) {
+//        [defaultAllSelectedCategories addObject:category];
+//    }
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *defaultAllSelectedCategories = [[NSMutableArray alloc]init];
-    for (id category in self.selectedCategories) {
-        [defaultAllSelectedCategories addObject:category];
-    }
-    [defaults setObject:defaultAllSelectedCategories forKey:@"savedSelectedCategories"];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.selectedCategories];
+    [defaults setObject:data forKey:@"savedSelectedCategories"];
+    
+    NSData *data1 = [NSKeyedArchiver archivedDataWithRootObject:self.selectedSort];
+    [defaults setObject:data1 forKey:@"savedSelectedSort"];
+    
+    data = [NSKeyedArchiver archivedDataWithRootObject:self.selectedRadius];
+    [defaults setObject:data forKey:@"savedSelectedRadius"];
+    
+    data = [NSKeyedArchiver archivedDataWithRootObject:self.selectedDeal];
+    [defaults setObject:data forKey:@"savedSelectedDeal"];
+    
+    //[defaults setObject:defaultAllSelectedCategories forKey:@"savedSelectedCategories"];
     
 //    [self.selectedSort enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
 //        [defaults setObject:obj forKey:@"savedSortFilter"];
@@ -345,7 +396,7 @@ NSInteger numRowsForCategories = 4;
 //          [[defaults objectForKey:@"savedSortFilter"] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
   //          [self.selectedSort addObject:obj];
     
-    [defaults setObject:self.selectedSort forKey:@"savedSortFilter"];
+//    [defaults setObject:self.selectedSort forKey:@"savedSortFilter"];
     
     [defaults synchronize];
     [self.delegate filtersViewController:self didChangeFilters:self.filters];
