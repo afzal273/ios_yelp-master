@@ -15,6 +15,7 @@
 @protocol FiltersViewControllerDelegate <NSObject>
 
 - (void)filtersViewController:(FiltersViewController *) filtersViewController didChangeFilters:(NSDictionary *)filters;
+- (void) setSelectedCategories : (NSMutableSet *) selectedCategories;
 
 @end
 

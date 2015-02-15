@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		220B909E1A8F28DC009EBB88 /* ExpandSectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 220B909C1A8F28DC009EBB88 /* ExpandSectionCell.m */; };
-		220B909F1A8F28DC009EBB88 /* ExpandSectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 220B909D1A8F28DC009EBB88 /* ExpandSectionCell.xib */; };
 		22205E691A8A4ECE00FA40F1 /* Business.m in Sources */ = {isa = PBXBuildFile; fileRef = 22205E681A8A4ECE00FA40F1 /* Business.m */; };
 		222A59461A8AF50C00E69213 /* BusinessCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 222A59441A8AF50C00E69213 /* BusinessCell.m */; };
 		222A59471A8AF50C00E69213 /* BusinessCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 222A59451A8AF50C00E69213 /* BusinessCell.xib */; };
@@ -49,9 +47,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		220B909B1A8F28DC009EBB88 /* ExpandSectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpandSectionCell.h; sourceTree = "<group>"; };
-		220B909C1A8F28DC009EBB88 /* ExpandSectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandSectionCell.m; sourceTree = "<group>"; };
-		220B909D1A8F28DC009EBB88 /* ExpandSectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExpandSectionCell.xib; sourceTree = "<group>"; };
 		22205E671A8A4ECE00FA40F1 /* Business.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Business.h; sourceTree = "<group>"; };
 		22205E681A8A4ECE00FA40F1 /* Business.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Business.m; sourceTree = "<group>"; };
 		222A59431A8AF50C00E69213 /* BusinessCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusinessCell.h; sourceTree = "<group>"; };
@@ -134,9 +129,6 @@
 			isa = PBXGroup;
 			children = (
 				222A59431A8AF50C00E69213 /* BusinessCell.h */,
-				220B909B1A8F28DC009EBB88 /* ExpandSectionCell.h */,
-				220B909C1A8F28DC009EBB88 /* ExpandSectionCell.m */,
-				220B909D1A8F28DC009EBB88 /* ExpandSectionCell.xib */,
 				222A59441A8AF50C00E69213 /* BusinessCell.m */,
 				222A59451A8AF50C00E69213 /* BusinessCell.xib */,
 				222A59501A8BB28200E69213 /* SwitchCell.h */,
@@ -336,7 +328,6 @@
 				42FD6C5518DC286B000BF2B9 /* InfoPlist.strings in Resources */,
 				222A59471A8AF50C00E69213 /* BusinessCell.xib in Resources */,
 				2254C2031A901537002849BE /* CirclePlus32.png in Resources */,
-				220B909F1A8F28DC009EBB88 /* ExpandSectionCell.xib in Resources */,
 				222A594F1A8B2FAB00E69213 /* FiltersViewController.xib in Resources */,
 				2254C2051A90156F002849BE /* CirclePlus24.png in Resources */,
 				420474FC18DC2B2100E88E07 /* MainViewController.xib in Resources */,
@@ -397,7 +388,6 @@
 				222A594E1A8B2FAB00E69213 /* FiltersViewController.m in Sources */,
 				222A59531A8BB28200E69213 /* SwitchCell.m in Sources */,
 				22205E691A8A4ECE00FA40F1 /* Business.m in Sources */,
-				220B909E1A8F28DC009EBB88 /* ExpandSectionCell.m in Sources */,
 				42FD6C5B18DC286B000BF2B9 /* AppDelegate.m in Sources */,
 				225EC6C51A8F2F7000052BC5 /* AllFilters.m in Sources */,
 				42FD6C5718DC286B000BF2B9 /* main.m in Sources */,

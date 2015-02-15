@@ -45,7 +45,7 @@
 
 -(NSArray*) dealTypes {
     
-    return @[@{@"name" : @"Offering a deal", @"code": @"0" }];
+    return @[@{@"name" : @"Offering a deal", @"code": @"1" }];
 }
 
 
@@ -59,8 +59,7 @@
 
 - (NSArray*)radiusTypes {
     return
-    @[@{@"name" : @"0.3 miles", @"code": @"483" },
-      @{@"name" : @"1 mile", @"code": @"1609" },
+    @[@{@"name" : @"1 mile", @"code": @"1609" },
       @{@"name" : @"5 miles", @"code": @"8047" },
       @{@"name" : @"20 miles", @"code": @"32187" }];
     
