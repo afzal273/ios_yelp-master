@@ -19,7 +19,7 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6j7-TE-RyQ">
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6j7-TE-RyQ">
                         <rect key="frame" x="263" y="9" width="51" height="32"/>
                         <connections>
                             <action selector="switchValueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="CPn-UI-GSq"/>
@@ -28,7 +28,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="6j7-TE-RyQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="3Pw-2T-VdY"/>
-                    <constraint firstAttribute="bottom" secondItem="6j7-TE-RyQ" secondAttribute="bottom" constant="8" id="9O7-9t-802"/>
+                    <constraint firstAttribute="bottom" secondItem="6j7-TE-RyQ" secondAttribute="bottom" constant="9" id="9O7-9t-802"/>
                     <constraint firstAttribute="trailing" secondItem="6j7-TE-RyQ" secondAttribute="trailing" constant="8.5" id="JGD-SD-MPm"/>
                     <constraint firstAttribute="centerY" secondItem="rON-an-o7h" secondAttribute="centerY" id="RvK-Uj-T16"/>
                     <constraint firstItem="rON-an-o7h" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="uFs-F6-2Fo"/>

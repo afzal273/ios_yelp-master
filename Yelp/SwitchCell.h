@@ -24,7 +24,7 @@
 @property(nonatomic, assign) BOOL on;
 @property(nonatomic, weak) id<SwitchCellDelegate> delegate;
 
-- (void)setOn:(BOOL)on amimated:(BOOL)animated;
+- (void)setOn:(BOOL)on animated:(BOOL)animated;
 
 
 @end

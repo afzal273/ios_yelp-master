@@ -9,13 +9,29 @@
 #import "FiltersViewController.h"
 #import "SwitchCell.h"
 
+NSInteger numRowsForCategories = 4;
+
 @interface FiltersViewController ()<UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate>
 @property (nonatomic, readonly)NSDictionary *filters;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *categories;
-@property (nonatomic, strong)NSMutableSet *selectedCategories;
+@property (nonatomic, strong) NSArray *sortTypes;
+@property (nonatomic, strong) NSArray *radiusTypes;
+@property (nonatomic, strong) NSMutableSet *selectedCategories;
+@property (nonatomic, strong) NSString *selectedSortType;
+@property (nonatomic, strong) NSString *selectedRadiusType;
+@property (nonatomic, strong) NSString *selectedDealsType;
+@property(nonatomic, strong) NSMutableDictionary *isExpandedSection;
+
+//@property (nonatomic, strong) UISwitch *dealsSwitch;
 
 - (void) initCategories;
+- (void) initSortTypes;
+- (void) initRadiusTypes;
+- (BOOL)isExpandedSection:(NSInteger)section;
+- (void)expandSection:(NSInteger)section;
+- (void)collapseSection:(NSInteger)section withRow: (NSInteger) row;
+
 
 @end
 
@@ -24,10 +40,18 @@
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self){
+        self.title = @"Filters";
         self.selectedCategories = [NSMutableSet set];
+        self.isExpandedSection = [NSMutableDictionary dictionary];
         
+        // Setting defaults for Filters
+        self.selectedSortType = @"0";
+        self.selectedDealsType = @"0";
+        self.selectedRadiusType = @"483";
         
         [self initCategories];
+        [self initSortTypes];
+        [self initRadiusTypes];
         
     }
     return self;
@@ -43,6 +67,7 @@
     self.tableView.dataSource = self;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"SwitchCell" bundle:nil] forCellReuseIdentifier:@"SwitchCell"];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"DefaultCell"];
     
     
 }
@@ -55,26 +80,175 @@
 
 #pragma mark - Table Methods
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 4;
+}
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.categories.count;
+    switch (section) {
+        case 0:
+            if ([self isExpandedSection:section]) {
+                return self.sortTypes.count;
+            } else {
+                return 1;
+            }
+        case 1:
+            if ([self isExpandedSection:section]) {
+                return self.radiusTypes.count;
+            } else {
+                return 1;
+            }
+
+        case 2:
+            return 1;
+        case 3:
+            if ([self isExpandedSection:section]) {
+                return self.categories.count;
+            } else {
+                return numRowsForCategories+1;
+            }
+            
+        default:
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"invalid section" userInfo:nil];
+    }
+    
     
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SwitchCell"];
+//    SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+//    NSLog(@"row is %ld",row);
+    switch (section) {
+        case 0:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
+            cell.textLabel.text = self.sortTypes[indexPath.row][@"name"];
+            if ([self isExpandedSection:section]) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                
+            } else {
+
+//            cell.accessoryType = UITableViewCellAccessoryNone;
+
+            cell.accessoryView  = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CirclePlus24.png"]];
+            }
+            //cell.on = [self.sortTypes containsObject:self.sortTypes[indexPath.row]];
+           // cell.delegate = self;
+            return cell;
+
+        case 1:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
+            cell.textLabel.text = self.radiusTypes[indexPath.row][@"name"];
+            if ([self isExpandedSection:section]) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                
+            } else {
+                
+                //            cell.accessoryType = UITableViewCellAccessoryNone;
+                
+                cell.accessoryView  = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CirclePlus24.png"]];
+            }
+            //cell.on = [self.sortTypes containsObject:self.sortTypes[indexPath.row]];
+            // cell.delegate = self;
+            return cell;
+        case 2:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"SwitchCell"];
+            cell.titleLabel.text = @"Offering a Deal";
+//            cell.accessoryView = self.dealsSwitch;
+//            cell.delegate = self;
+            return cell;
+        case 3:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"SwitchCell"];
+            cell.titleLabel.text = self.categories[indexPath.row][@"name"];
+            
+            if (row == numRowsForCategories && ![self isExpandedSection:section]) {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
+                cell.textLabel.text = @"See All";
+                cell.accessoryView  = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CirclePlus24.png"]];
+
+
+            } else {
+            
+            
+            cell.on = [self.selectedCategories containsObject:self.categories[indexPath.row]];
+            cell.delegate = self;
+            }
+            return cell;
+            
+            
+        default:
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"invalid section" userInfo:nil];
+            
+
+    }
+
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    switch (section) {
+        case 0:
+                return @"SORT BY";
+
+        case 1:
+                return @"DISTANCE";
+
+        case 2:
+
+                return @"DEALS";
+        case 3:
+
+                return @"CATEGORIES";
+        default:
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"invalid section" userInfo:nil];
+    }
+
     
-    cell.titleLabel.text = self.categories[indexPath.row][@"name"];
-    cell.on = [self.selectedCategories containsObject:self.categories[indexPath.row]];
-    cell.delegate = self;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
     
-    return cell;
+    switch (section) {
+        case 0:
+            if ([self isExpandedSection:section]) {
+                [self collapseSection:section withRow:row];
+                NSLog(@"Getting into expanded secion for 0th section");
+                
+                
+            } else {
+                [self expandSection:section];
+            }
+        case 1:
+            if ([self isExpandedSection:section]) {
+                [self collapseSection:section withRow:row];
+                
+                
+            } else {
+                [self expandSection:section];
+            }
+        case 3:
+            if (row == numRowsForCategories && ![self isExpandedSection:section]){
+                [self expandSection:section];
+                }
+    
+    }
+   
     
 }
 
 #pragma mark - Switch cell delegate methods
 
 - (void)switchCell:(SwitchCell *)cell didUpdateValue:(BOOL)value {
+    
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    //NSInteger section = indexPath.section;
+    //NSInteger row = indexPath.row;
     if (value) {
         [self.selectedCategories addObject:self.categories[indexPath.row]];
         
@@ -87,8 +261,41 @@
 
 #pragma mark - Private Methods
 
+- (BOOL)isExpandedSection:(NSInteger)section {
+    return [self.isExpandedSection[@(section)] boolValue];
+}
+
+- (void)expandSection:(NSInteger)section {
+    self.isExpandedSection[@(section)] = @YES;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)collapseSection:(NSInteger)section withRow: (NSInteger) row {
+    //NSIndexPath *prevSelectionIndexPath;
+    switch (section) {
+        case 0:
+     //       prevSelectionIndexPath = [NSIndexPath indexPathForRow: inSection:section];
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.isExpandedSection[@(section)] = @NO;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+}
+    
+
+
+
 - (NSDictionary * ) filters {
     NSMutableDictionary *filters = [NSMutableDictionary dictionary];
+
+    [filters setObject:self.selectedSortType forKey:@"sort"];
+    [filters setObject:self.selectedRadiusType forKey:@"radius_filter"];
+    [filters setObject:self.selectedDealsType forKey:@"deals_filter"];
+ 
     if (self.selectedCategories.count > 0) {
         NSMutableArray *names = [NSMutableArray array];
         for (NSDictionary *category in self.selectedCategories) {
@@ -101,9 +308,10 @@
     return filters;
 }
 
+
 - (void) onCancelButton {
 
-  //  [self.delegate filtersViewController:self didChangeFilters:nil];
+    [self.delegate filtersViewController:self didChangeFilters:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
@@ -111,6 +319,23 @@
 - (void) onApplyButton {
     [self.delegate filtersViewController:self didChangeFilters:self.filters];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)initSortTypes {
+    self.sortTypes =
+    @[@{@"name" : @"Best Matched", @"code": @"0" },
+      @{@"name" : @"Distance", @"code": @"1" },
+      @{@"name" : @"Highest Rated", @"code": @"2" }];
+
+}
+
+- (void)initRadiusTypes {
+    self.radiusTypes =
+    @[@{@"name" : @"0.3 miles", @"code": @"483" },
+      @{@"name" : @"1 mile", @"code": @"1609" },
+      @{@"name" : @"5 miles", @"code": @"8047" },
+      @{@"name" : @"20 miles", @"code": @"32187" }];
+    
 }
 
 - (void)initCategories {

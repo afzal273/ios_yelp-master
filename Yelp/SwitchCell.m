@@ -32,11 +32,11 @@
 }
 
 - (void)setOn:(BOOL)on  {
-    [self setOn:on amimated:NO];
+    [self setOn:on animated:NO];
     
 }
 
-- (void)setOn:(BOOL)on amimated:(BOOL)animated {
+- (void)setOn:(BOOL)on animated:(BOOL)animated {
     _on = on;
     [self.toggleSwitch setOn:on animated:animated];
     
