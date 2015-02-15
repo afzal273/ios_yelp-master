@@ -39,14 +39,8 @@ NSInteger kNumRowsForCategories = 4;
         self.selectedCategories = [NSMutableSet set];
         self.selectedRadius = [NSMutableSet set];
         self.selectedDeal = [NSMutableSet set];
-        self.selectedSort = [NSMutableSet set];
-        
+        self.selectedSort = [NSMutableSet set];        
         self.isExpandedSection = [NSMutableDictionary dictionary];
-        
-
-
-     //   self.selectedCategories = [defaults objectForKey:@"allSelectedFilters"];
-        
         self.allFilters = [[AllFilters alloc] initAllFilters];
        
         
@@ -127,10 +121,10 @@ NSInteger kNumRowsForCategories = 4;
     cell.delegate = self;
   //  SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
     NSInteger section = indexPath.section;
-//    NSInteger row = indexPath.row;
+
     
     NSString *sectionTitle = [[self.allFilters allFilters] objectAtIndex:section];
-    //NSLog(@"key is %@", key );
+
     
     NSArray *contents = [[self.allFilters allContents] objectForKey:sectionTitle];
     
@@ -141,10 +135,7 @@ NSInteger kNumRowsForCategories = 4;
     
     switch (section) {
         case 0:
-
-
             cell.on = [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]];
-            NSLog(@"output of cell.on is %d", [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]]);
                 return cell;
 
         case 1:
@@ -155,8 +146,6 @@ NSInteger kNumRowsForCategories = 4;
                 return cell;
         case 3:
             cell.on = [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]];
-            NSLog(@"in the selected categories now");
-            NSLog(@"output of cell.on in categories is %d", [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]]);
                 return cell;
 
             
@@ -178,11 +167,7 @@ NSInteger kNumRowsForCategories = 4;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-//    NSInteger section = indexPath.section;
-//    NSInteger row = indexPath.row;
-    
 
-   
     
 }
 
@@ -194,77 +179,48 @@ NSInteger kNumRowsForCategories = 4;
     NSString *key = [[self.allFilters allFilters] objectAtIndex:[indexPath section]];
     NSArray *contents = [[self.allFilters allContents] objectForKey:key];
     
-    //NSString *contentForThisRow = [contents objectAtIndex:[indexPath row]];
-    
-    
-    //cell.titleLabel.text = contents[indexPath.row][@"name"];
-    
-    //NSInteger section = indexPath.section;
-    //NSInteger row = indexPath.row;
-    
     if ([key isEqualToString:@"Sort By"]) {
-        NSLog(@"Flipping switch in sort by");
 
-      //  [self.tableView reloadData];
         if (value) {
             [self.selectedSort removeAllObjects];
             [self.selectedSort addObject:[contents objectAtIndex:[indexPath row]]];
             [self.tableView reloadData];
-            NSLog(@"selected sort looks like %@", self.selectedSort);
-            
-            
+         
         } else {
             [self.selectedSort removeObject:[contents objectAtIndex:[indexPath row]]];
         }
         
     } else if ([key isEqualToString:@"Distance"]) {
-            NSLog(@"Flipping switch in distance");
-            
-            //[self.tableView reloadData];
+
             if (value) {
                 [self.selectedRadius removeAllObjects];
                 [self.selectedRadius addObject:[contents objectAtIndex:[indexPath row]]];
                 [self.tableView reloadData];
-                NSLog(@"selected radius looks like %@", self.selectedRadius);
-                
-                
             } else {
+                [self.selectedRadius removeObject:[contents objectAtIndex:[indexPath row]]];
                 
             }
     } else if ([key isEqualToString:@"Deals"]) {
-        NSLog(@"Flipping switch in Deals");
-        
-        //[self.tableView reloadData];
+
         if (value) {
             [self.selectedDeal addObject:[contents objectAtIndex:[indexPath row]]];
-            //[self.tableView reloadData];
-            NSLog(@"selected radius deal looks like %@", self.selectedDeal);
-            
-            
+          
         } else {
             [self.selectedDeal removeObject:[contents objectAtIndex:[indexPath row]]];
-            //[self.tableView reloadData];
-            NSLog(@"selected deal looks like %@", self.selectedDeal);
             
         }
         
         
     } else if ([key isEqualToString:@"Categories"]) {
         if (value) {
-            NSLog(@"Flipping switch in sort by");
-            NSLog(@"Selected categories are %@ and trying to add to it %@",self.selectedCategories, [contents objectAtIndex:[indexPath row]]);
             [self.selectedCategories addObject:[contents objectAtIndex:[indexPath row]]];
-            //    NSLog(@"%ld, %ld, %@",[indexPath section],[indexPath row], );
-            
             
         }else {
             [self.selectedCategories removeObject:[contents objectAtIndex:[indexPath row]]];
             
         }
     }
-    
 
-    
 }
 
 #pragma mark - Private Methods
@@ -298,15 +254,8 @@ NSInteger kNumRowsForCategories = 4;
 
 
 - (NSDictionary * ) filters {
+    // Creating the filters dictionary to be sent to yelp
     NSMutableDictionary *filters = [NSMutableDictionary dictionary];
-
-//    [filters setObject:self.selectedSortType forKey:@"sort"];
-//    [filters setObject:self.selectedRadiusType forKey:@"radius_filter"];
-//    [filters setObject:self.selectedDealsType forKey:@"deals_filter"];
-
-    
-    
-//    [filters setObject:self.selectedRadius forKey:@"radius_filter"];
     
     for (NSDictionary *sort in self.selectedSort) {
         [filters setObject:sort[@"code"] forKey:@"sort"];
@@ -316,17 +265,9 @@ NSInteger kNumRowsForCategories = 4;
         [filters setObject:radius[@"code"] forKey:@"radius_filter"];
     }
     
-    
-    
     if (self.selectedDeal.count > 0) {
         [filters setObject:@"1" forKey:@"deal"];
-        NSLog(@"setting deals inside filter initi");
-        
     }
-
-
-        
-
  
     if (self.selectedCategories.count > 0) {
         NSMutableArray *names = [NSMutableArray array];
@@ -364,7 +305,7 @@ NSInteger kNumRowsForCategories = 4;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:filter];
     [defaults setObject:data forKey:forKey];
-    //[defaults synchronize];
+    [defaults synchronize];
 }
 
 -(id) getFromDefaults:(NSString*) forKey{
