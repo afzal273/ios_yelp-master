@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface AllFilters : NSObject
-@property(strong, nonatomic) NSArray *allFilters;
+@property(strong, nonatomic) NSMutableArray *allFilters;
+@property(strong, nonatomic) NSMutableDictionary *allContents;
 
-- (void) initAllFilters;
+
+- (id) initAllFilters;
+
 
 @end
