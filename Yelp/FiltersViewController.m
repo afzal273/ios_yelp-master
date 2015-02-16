@@ -161,12 +161,11 @@ NSInteger knumRowsForCategories = 4;
         case 0:
         case 1:
         {
+            // For these 2 cases using UItableviewcell
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
             
             NSString *label;
             NSMutableSet *totest;
-            
-            
-            
             
             if (section == 0) {
                 totest = self.selectedSort;
@@ -182,8 +181,6 @@ NSInteger knumRowsForCategories = 4;
                     label = sort[@"name"];
                 }
             }
-            
-            cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
 
             if ([self isExpandedSection:section]) {
                 cell.textLabel.text = contents[indexPath.row][@"name"];
