@@ -35,7 +35,8 @@ NSInteger knumRowsForCategories = 4;
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self){
-        self.title = @"Filters";
+//        self.title = @"Filters";
+        
         
         self.selectedCategories = [NSMutableSet set];
 
@@ -58,6 +59,14 @@ NSInteger knumRowsForCategories = 4;
     
     self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     self.navigationController.navigationBar.barTintColor = [UIColor redColor];
+    
+    NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIColor whiteColor],NSForegroundColorAttributeName,
+                                    [UIColor whiteColor],NSBackgroundColorAttributeName,nil];
+    
+    self.navigationController.navigationBar.titleTextAttributes = textAttributes;
+    self.title = @"Filters";
+    
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(onCancelButton)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(onApplyButton)];
@@ -150,17 +159,14 @@ NSInteger knumRowsForCategories = 4;
     NSArray *contents = [[self.allFilters allContents] objectForKey:sectionTitle];
     
 
-    
     cell.titleLabel.text = contents[indexPath.row][@"name"];
-    
     
     switch (section) {
         case 0:
 
-
             cell.on = [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]];
                 return cell;
-
+            
         case 1:
             cell.on = [self.selectedRadius containsObject:[contents objectAtIndex:[indexPath row]]];
                 return cell;

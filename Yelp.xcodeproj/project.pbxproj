@@ -18,6 +18,7 @@
 		2254C2031A901537002849BE /* CirclePlus32.png in Resources */ = {isa = PBXBuildFile; fileRef = 2254C2021A901537002849BE /* CirclePlus32.png */; };
 		2254C2051A90156F002849BE /* CirclePlus24.png in Resources */ = {isa = PBXBuildFile; fileRef = 2254C2041A90156F002849BE /* CirclePlus24.png */; };
 		225EC6C51A8F2F7000052BC5 /* AllFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = 225EC6C41A8F2F7000052BC5 /* AllFilters.m */; };
+		229B3E531A91855400B82237 /* checkmark32.png in Resources */ = {isa = PBXBuildFile; fileRef = 229B3E521A91855400B82237 /* checkmark32.png */; };
 		420474F618DC299500E88E07 /* YelpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 420474F518DC299500E88E07 /* YelpClient.m */; };
 		420474FB18DC2B2100E88E07 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420474F918DC2B2100E88E07 /* MainViewController.m */; };
 		420474FC18DC2B2100E88E07 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 420474FA18DC2B2100E88E07 /* MainViewController.xib */; };
@@ -63,6 +64,7 @@
 		2254C2041A90156F002849BE /* CirclePlus24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CirclePlus24.png; sourceTree = "<group>"; };
 		225EC6C31A8F2F7000052BC5 /* AllFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllFilters.h; sourceTree = "<group>"; };
 		225EC6C41A8F2F7000052BC5 /* AllFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllFilters.m; sourceTree = "<group>"; };
+		229B3E521A91855400B82237 /* checkmark32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark32.png; sourceTree = "<group>"; };
 		420474F418DC299500E88E07 /* YelpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpClient.h; sourceTree = "<group>"; };
 		420474F518DC299500E88E07 /* YelpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpClient.m; sourceTree = "<group>"; };
 		420474F818DC2B2100E88E07 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 			children = (
 				2254C2021A901537002849BE /* CirclePlus32.png */,
 				2254C2001A90141E002849BE /* CirclePlus.png */,
+				229B3E521A91855400B82237 /* checkmark32.png */,
 				2254C2041A90156F002849BE /* CirclePlus24.png */,
 				42FD6C5218DC286B000BF2B9 /* Yelp-Info.plist */,
 				42FD6C5318DC286B000BF2B9 /* InfoPlist.strings */,
@@ -327,6 +330,7 @@
 			files = (
 				42FD6C5518DC286B000BF2B9 /* InfoPlist.strings in Resources */,
 				222A59471A8AF50C00E69213 /* BusinessCell.xib in Resources */,
+				229B3E531A91855400B82237 /* checkmark32.png in Resources */,
 				2254C2031A901537002849BE /* CirclePlus32.png in Resources */,
 				222A594F1A8B2FAB00E69213 /* FiltersViewController.xib in Resources */,
 				2254C2051A90156F002849BE /* CirclePlus24.png in Resources */,
