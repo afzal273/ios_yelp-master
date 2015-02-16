@@ -42,18 +42,10 @@ NSInteger knumRowsForCategories = 4;
 
         self.selectedRadius = [NSMutableSet set];
         self.selectedDeal = [NSMutableSet set];
-        self.selectedSort = [NSMutableSet set];        
+        self.selectedSort = [NSMutableSet set];
+        
         self.isExpandedSection = [NSMutableDictionary dictionary];
-<<<<<<< HEAD
 
-||||||| merged common ancestors
-        
-
-
-     //   self.selectedCategories = [defaults objectForKey:@"allSelectedFilters"];
-        
-=======
->>>>>>> FETCH_HEAD
         self.allFilters = [[AllFilters alloc] initAllFilters];
        
         
@@ -167,7 +159,6 @@ NSInteger knumRowsForCategories = 4;
     
     switch (section) {
         case 0:
-<<<<<<< HEAD
         case 1:
         {
             
@@ -210,14 +201,6 @@ NSInteger knumRowsForCategories = 4;
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CirclePlus20.png"]];
 
                 cell.textLabel.text = label;
-||||||| merged common ancestors
-
-
-            cell.on = [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]];
-            NSLog(@"output of cell.on is %d", [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]]);
-=======
-            cell.on = [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]];
->>>>>>> FETCH_HEAD
                 return cell;
             }
             
@@ -227,18 +210,10 @@ NSInteger knumRowsForCategories = 4;
             cell.on = [self.selectedDeal containsObject:[contents objectAtIndex:[indexPath row]]];
                 return cell;
         case 3:
-<<<<<<< HEAD
             if (indexPath.row == knumRowsForCategories  && ![self isExpandedSection:section] ) {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
                 cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CirclePlus20.png"]];
                 cell.textLabel.text = @"Show all Categories";
-||||||| merged common ancestors
-            cell.on = [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]];
-            NSLog(@"in the selected categories now");
-            NSLog(@"output of cell.on in categories is %d", [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]]);
-=======
-            cell.on = [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]];
->>>>>>> FETCH_HEAD
                 return cell;
                 
 
@@ -267,7 +242,6 @@ NSInteger knumRowsForCategories = 4;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-<<<<<<< HEAD
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     
@@ -290,12 +264,6 @@ NSInteger knumRowsForCategories = 4;
         default:
             break;
     }
-||||||| merged common ancestors
-//    NSInteger section = indexPath.section;
-//    NSInteger row = indexPath.row;
-    
-=======
->>>>>>> FETCH_HEAD
 
     
 }
@@ -307,94 +275,13 @@ NSInteger knumRowsForCategories = 4;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NSString *key = [[self.allFilters allFilters] objectAtIndex:[indexPath section]];
     NSArray *contents = [[self.allFilters allContents] objectForKey:key];
-<<<<<<< HEAD
-||||||| merged common ancestors
-    
-    //NSString *contentForThisRow = [contents objectAtIndex:[indexPath row]];
-    
-    
-    //cell.titleLabel.text = contents[indexPath.row][@"name"];
-    
-    //NSInteger section = indexPath.section;
-    //NSInteger row = indexPath.row;
-    
-    if ([key isEqualToString:@"Sort By"]) {
-        NSLog(@"Flipping switch in sort by");
-=======
-    
-    if ([key isEqualToString:@"Sort By"]) {
->>>>>>> FETCH_HEAD
 
-<<<<<<< HEAD
      if ([key isEqualToString:@"Deals"]) {
         
-||||||| merged common ancestors
-      //  [self.tableView reloadData];
-        if (value) {
-            [self.selectedSort removeAllObjects];
-            [self.selectedSort addObject:[contents objectAtIndex:[indexPath row]]];
-            [self.tableView reloadData];
-            NSLog(@"selected sort looks like %@", self.selectedSort);
-            
-            
-        } else {
-            [self.selectedSort removeObject:[contents objectAtIndex:[indexPath row]]];
-        }
-        
-    } else if ([key isEqualToString:@"Distance"]) {
-            NSLog(@"Flipping switch in distance");
-            
-            //[self.tableView reloadData];
-            if (value) {
-                [self.selectedRadius removeAllObjects];
-                [self.selectedRadius addObject:[contents objectAtIndex:[indexPath row]]];
-                [self.tableView reloadData];
-                NSLog(@"selected radius looks like %@", self.selectedRadius);
-                
-                
-            } else {
-                
-            }
-    } else if ([key isEqualToString:@"Deals"]) {
-        NSLog(@"Flipping switch in Deals");
-        
-        //[self.tableView reloadData];
-=======
-        if (value) {
-            [self.selectedSort removeAllObjects];
-            [self.selectedSort addObject:[contents objectAtIndex:[indexPath row]]];
-            [self.tableView reloadData];
-         
-        } else {
-            [self.selectedSort removeObject:[contents objectAtIndex:[indexPath row]]];
-        }
-        
-    } else if ([key isEqualToString:@"Distance"]) {
-
-            if (value) {
-                [self.selectedRadius removeAllObjects];
-                [self.selectedRadius addObject:[contents objectAtIndex:[indexPath row]]];
-                [self.tableView reloadData];
-            } else {
-                [self.selectedRadius removeObject:[contents objectAtIndex:[indexPath row]]];
-                
-            }
-    } else if ([key isEqualToString:@"Deals"]) {
-
->>>>>>> FETCH_HEAD
         if (value) {
             [self.selectedDeal addObject:[contents objectAtIndex:[indexPath row]]];
-<<<<<<< HEAD
             
             
-||||||| merged common ancestors
-            //[self.tableView reloadData];
-            NSLog(@"selected radius deal looks like %@", self.selectedDeal);
-            
-            
-=======
-          
->>>>>>> FETCH_HEAD
         } else {
             [self.selectedDeal removeObject:[contents objectAtIndex:[indexPath row]]];
             
@@ -403,36 +290,16 @@ NSInteger knumRowsForCategories = 4;
         
     } else if ([key isEqualToString:@"Categories"]) {
         if (value) {
-<<<<<<< HEAD
 
-||||||| merged common ancestors
-            NSLog(@"Flipping switch in sort by");
-            NSLog(@"Selected categories are %@ and trying to add to it %@",self.selectedCategories, [contents objectAtIndex:[indexPath row]]);
-=======
->>>>>>> FETCH_HEAD
             [self.selectedCategories addObject:[contents objectAtIndex:[indexPath row]]];
-<<<<<<< HEAD
             
-||||||| merged common ancestors
-            //    NSLog(@"%ld, %ld, %@",[indexPath section],[indexPath row], );
-            
-=======
->>>>>>> FETCH_HEAD
             
         }else {
             [self.selectedCategories removeObject:[contents objectAtIndex:[indexPath row]]];
             
         }
     }
-<<<<<<< HEAD
     
-||||||| merged common ancestors
-    
-
-    
-=======
-
->>>>>>> FETCH_HEAD
 }
 
 #pragma mark - Private Methods
@@ -476,21 +343,8 @@ NSInteger knumRowsForCategories = 4;
 
 
 - (NSDictionary * ) filters {
-    // Creating the filters dictionary to be sent to yelp
     NSMutableDictionary *filters = [NSMutableDictionary dictionary];
-<<<<<<< HEAD
 
-||||||| merged common ancestors
-
-//    [filters setObject:self.selectedSortType forKey:@"sort"];
-//    [filters setObject:self.selectedRadiusType forKey:@"radius_filter"];
-//    [filters setObject:self.selectedDealsType forKey:@"deals_filter"];
-
-    
-    
-//    [filters setObject:self.selectedRadius forKey:@"radius_filter"];
-=======
->>>>>>> FETCH_HEAD
     
     for (NSDictionary *sort in self.selectedSort) {
         [filters setObject:sort[@"code"] forKey:@"sort"];
@@ -500,25 +354,11 @@ NSInteger knumRowsForCategories = 4;
         [filters setObject:radius[@"code"] forKey:@"radius_filter"];
     }
     
-<<<<<<< HEAD
     
-||||||| merged common ancestors
-    
-    
-=======
->>>>>>> FETCH_HEAD
     if (self.selectedDeal.count > 0) {
         [filters setObject:@"1" forKey:@"deal"];
     }
-<<<<<<< HEAD
 
-||||||| merged common ancestors
-
-
-        
-
-=======
->>>>>>> FETCH_HEAD
  
     if (self.selectedCategories.count > 0) {
         NSMutableArray *names = [NSMutableArray array];
@@ -575,6 +415,3 @@ NSInteger knumRowsForCategories = 4;
 
 
 @end
-
-
-
