@@ -36,6 +36,7 @@ NSInteger knumRowsForCategories = 4;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self){
         self.title = @"Filters";
+        
         self.selectedCategories = [NSMutableSet set];
 
         self.selectedRadius = [NSMutableSet set];
@@ -43,10 +44,7 @@ NSInteger knumRowsForCategories = 4;
         self.selectedSort = [NSMutableSet set];
         
         self.isExpandedSection = [NSMutableDictionary dictionary];
-        
 
-
-        
         self.allFilters = [[AllFilters alloc] initAllFilters];
        
         
@@ -58,8 +56,13 @@ NSInteger knumRowsForCategories = 4;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
+    self.navigationController.navigationBar.barTintColor = [UIColor redColor];
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(onCancelButton)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(onApplyButton)];
+    [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -101,7 +104,7 @@ NSInteger knumRowsForCategories = 4;
 
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    view.tintColor = [UIColor orangeColor];
+    view.tintColor = [UIColor redColor];
     
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     [header.textLabel setTextColor:[UIColor whiteColor]];

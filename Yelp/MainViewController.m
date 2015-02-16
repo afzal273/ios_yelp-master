@@ -68,6 +68,8 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     self.tableView.estimatedRowHeight = 85;
     self.title = @"Yelp";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(onFilterButton)];
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+
     self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 200, 200)];
     self.searchBar.delegate = self;
     self.navigationItem.titleView = self.searchBar;
@@ -75,21 +77,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     self.navigationController.navigationBar.barTintColor = [UIColor redColor];
   
     
-//    [self.tableView addInfiniteScrollingWithActionHandler:^{
-//        // append data to data source, insert new cells at the end of table view
-//        
-//        [self.tableView.infiniteScrollingView stopAnimating];
-//    }];
-    
-    
-//    [self.tableView triggerInfiniteScrolling];
 
-//    UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-//    UIActivityIndicatorView *loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//    [loadingView startAnimating];
-//    loadingView.center = tableFooterView.center;
-//    [tableFooterView addSubview:loadingView];
-//    self.tableView.tableFooterView = tableFooterView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -101,15 +89,12 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 #pragma mark - Search Methods
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-//    [searchBar sizeToFit];
     [searchBar setShowsCancelButton:YES animated:YES];
-//    [searchBar setSearchResultsButtonSelected:YES];
     return YES;
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     NSLog(@"Search button clicked");
-    //    NSString *test = [self.searchBar.text];
     NSString *query = self.searchBar.text;
     [SVProgressHUD show];
     [SVProgressHUD setBackgroundColor:[UIColor redColor]];
@@ -128,9 +113,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [self fetchBusinessesWithQuery:@"" params:nil];
     [searchBar resignFirstResponder];
 
-//    self.searching = NO;
-//    [self refreshView];
-//    [searchBar sizeToFit];
+
 }
 
 
@@ -148,19 +131,10 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     
     //the cell itself knows how to configure the business
     cell.business = self.businesses[indexPath.row];
-    
-//    if (indexPath.row == self.businesses.count){
-//        NSLog(@"entering last cell");
-//        [self fetchBusinessesWithQuery:@"Restaurants" params:nil];
-//        [tableView reloadData];
-//    }
-   
-    
+
     
     return cell;
-    
-    
-    
+
  }
 
 #pragma mark - Filter delegate methods
@@ -170,7 +144,6 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [self showLoadingHUD];
     [self fetchBusinessesWithQuery:@"Restaurants" params:filters];
 
-    //NSLog(@"Fire new network event: %@", filters);
 }
 
 
@@ -180,7 +153,6 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     
     
     [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
-       // NSLog(@"response %@", response);
         NSArray *businessDictionaries = response[@"businesses"];
         self.businesses = [Business businessesWithDictionaies:businessDictionaries];
             [SVProgressHUD dismiss];
