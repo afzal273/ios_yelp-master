@@ -94,7 +94,6 @@ NSInteger knumRowsForCategories = 4;
         self.selectedCategories = [self getFromDefaults:@"savedSelectedCategories"];
     }
     
-
     
 }
 
@@ -162,11 +161,36 @@ NSInteger knumRowsForCategories = 4;
     cell.titleLabel.text = contents[indexPath.row][@"name"];
     
     switch (section) {
-        case 0:
-
-            cell.on = [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]];
-                return cell;
+        case 0: {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
             
+            NSString *label;
+            for (NSDictionary *sort in self.selectedSort) {
+                label = sort[@"name"];
+            }
+
+            if ([self isExpandedSection:section]) {
+                cell.textLabel.text = contents[indexPath.row][@"name"];
+                NSLog(@"selected item and text box are %@ and %@", label, cell.textLabel.text);
+                
+
+                if ([label isEqualToString:cell.textLabel.text]) {
+                    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CheckMark20.png"]];
+                    return cell;
+                }
+                else {
+                    cell.accessoryView = nil;
+                    return cell;
+                }
+                
+            } else {
+                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CirclePlus20.png"]];
+
+                cell.textLabel.text = label;
+                return cell;
+            }
+            
+        }
         case 1:
             cell.on = [self.selectedRadius containsObject:[contents objectAtIndex:[indexPath row]]];
                 return cell;
@@ -176,7 +200,7 @@ NSInteger knumRowsForCategories = 4;
         case 3:
             if (indexPath.row == knumRowsForCategories  && ![self isExpandedSection:section] ) {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
-                cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CirclePlus24.png"]];
+                cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CirclePlus20.png"]];
                 cell.textLabel.text = @"Show all Categories";
                 cell.textLabel.textAlignment = NSTextAlignmentCenter;
                 
@@ -307,14 +331,20 @@ NSInteger knumRowsForCategories = 4;
 
 - (void)collapseSection:(NSInteger)section withRow: (NSInteger) row {
     //NSIndexPath *prevSelectionIndexPath;
-//    switch (section) {
-//        case 0:
-//     //       prevSelectionIndexPath = [NSIndexPath indexPathForRow: inSection:section];
-//            break;
-//            
-//        default:
-//            break;
-//    }
+    
+    NSString *sectionTitle = [[self.allFilters allFilters] objectAtIndex:section];
+    
+    NSArray *contents = [[self.allFilters allContents] objectForKey:sectionTitle];
+    
+    switch (section) {
+        case 0:
+            [self.selectedSort removeAllObjects];
+            [self.selectedSort addObject:[contents objectAtIndex:row]];
+            break;
+            
+        default:
+            break;
+    }
     
     self.isExpandedSection[@(section)] = @NO;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
