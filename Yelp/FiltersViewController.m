@@ -10,7 +10,7 @@
 #import "SwitchCell.h"
 #import "AllFilters.h"
 
-NSInteger kNumRowsForCategories = 4;
+NSInteger knumRowsForCategories = 4;
 
 @interface FiltersViewController ()<UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate>
 @property (nonatomic, readonly)NSDictionary *filters;
@@ -37,6 +37,7 @@ NSInteger kNumRowsForCategories = 4;
     if (self){
         self.title = @"Filters";
         self.selectedCategories = [NSMutableSet set];
+
         self.selectedRadius = [NSMutableSet set];
         self.selectedDeal = [NSMutableSet set];
         self.selectedSort = [NSMutableSet set];
@@ -45,7 +46,6 @@ NSInteger kNumRowsForCategories = 4;
         
 
 
-     //   self.selectedCategories = [defaults objectForKey:@"allSelectedFilters"];
         
         self.allFilters = [[AllFilters alloc] initAllFilters];
        
@@ -65,12 +65,24 @@ NSInteger kNumRowsForCategories = 4;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"SwitchCell" bundle:nil] forCellReuseIdentifier:@"SwitchCell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"DefaultCell"];
-
     
-    self.selectedSort = [self getFromDefaults:@"savedSelectedSort"];
-    self.selectedRadius = [self getFromDefaults:@"savedSelectedRadius"];
+    if ([self getFromDefaults:@"savedSelectedSort"] != nil) {
+        self.selectedSort = [self getFromDefaults:@"savedSelectedSort"];
+    }
+    
+    if ([self getFromDefaults:@"savedSelectedRadius"] != nil) {
+        self.selectedRadius = [self getFromDefaults:@"savedSelectedRadius"];
+    }
+    
+    if ([self getFromDefaults:@"savedSelectedDeal"] != nil) {
     self.selectedDeal = [self getFromDefaults:@"savedSelectedDeal"];
-    self.selectedCategories = [self getFromDefaults:@"savedSelectedCategories"];
+    }
+    
+    if ([self getFromDefaults:@"savedSelectedCategories"] != nil) {
+        self.selectedCategories = [self getFromDefaults:@"savedSelectedCategories"];
+    }
+    
+
     
 }
 
@@ -86,6 +98,7 @@ NSInteger kNumRowsForCategories = 4;
     return [self.allFilters allFilters].count;
     
 }
+
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     view.tintColor = [UIColor orangeColor];
@@ -104,19 +117,18 @@ NSInteger kNumRowsForCategories = 4;
         if ([self isExpandedSection:section]) {
             return expandedSectionCount;
         } else {
-            return kNumRowsForCategories+1;
+            return knumRowsForCategories+1;
         }
     }
-
-   // if ([self isExpandedSection:section]) {
-        return expandedSectionCount;
-    //} else {
-   //     return 1;
-    //}
-
     
- //  return [[[self.allFilters allContents] objectForKey:key] count];
-  
+     if ([self isExpandedSection:section]) {
+    return expandedSectionCount;
+    } else {
+        return 1;
+    }
+    
+    
+    
     
 }
 
@@ -127,10 +139,10 @@ NSInteger kNumRowsForCategories = 4;
     cell.delegate = self;
   //  SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
     NSInteger section = indexPath.section;
-//    NSInteger row = indexPath.row;
+
     
     NSString *sectionTitle = [[self.allFilters allFilters] objectAtIndex:section];
-    //NSLog(@"key is %@", key );
+
     
     NSArray *contents = [[self.allFilters allContents] objectForKey:sectionTitle];
     
@@ -144,7 +156,6 @@ NSInteger kNumRowsForCategories = 4;
 
 
             cell.on = [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]];
-            NSLog(@"output of cell.on is %d", [self.selectedSort containsObject:[contents objectAtIndex:[indexPath row]]]);
                 return cell;
 
         case 1:
@@ -154,14 +165,24 @@ NSInteger kNumRowsForCategories = 4;
             cell.on = [self.selectedDeal containsObject:[contents objectAtIndex:[indexPath row]]];
                 return cell;
         case 3:
-            cell.on = [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]];
-            NSLog(@"in the selected categories now");
-            NSLog(@"output of cell.on in categories is %d", [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]]);
+            if (indexPath.row == knumRowsForCategories  && ![self isExpandedSection:section] ) {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
+                cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CirclePlus24.png"]];
+                cell.textLabel.text = @"Show all Categories";
+                cell.textLabel.textAlignment = NSTextAlignmentCenter;
+                
                 return cell;
+                
 
+            } else {
+            cell.on = [self.selectedCategories containsObject:[contents objectAtIndex:[indexPath row]]];
+
+                return cell;
+            }
             
         default:
-            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"invalid section" userInfo:nil];    }
+                @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"No such section exists" userInfo:nil];
+    }
     
 
 }
@@ -178,11 +199,29 @@ NSInteger kNumRowsForCategories = 4;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-//    NSInteger section = indexPath.section;
-//    NSInteger row = indexPath.row;
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
     
+    switch (section) {
+            
+        case 0:
+        case 1:
+            if ([self isExpandedSection:section]) {
+                [self collapseSection:section withRow:row];
+            } else {
+                [self expandSection:section];
+            }
+            break;
+        case 3:
+            if (row == knumRowsForCategories && ![self isExpandedSection:section]) {
+                [self expandSection:section];
+            }
+            break;
+            
+        default:
+            break;
+    }
 
-   
     
 }
 
@@ -194,23 +233,12 @@ NSInteger kNumRowsForCategories = 4;
     NSString *key = [[self.allFilters allFilters] objectAtIndex:[indexPath section]];
     NSArray *contents = [[self.allFilters allContents] objectForKey:key];
     
-    //NSString *contentForThisRow = [contents objectAtIndex:[indexPath row]];
-    
-    
-    //cell.titleLabel.text = contents[indexPath.row][@"name"];
-    
-    //NSInteger section = indexPath.section;
-    //NSInteger row = indexPath.row;
     
     if ([key isEqualToString:@"Sort By"]) {
-        NSLog(@"Flipping switch in sort by");
-
-      //  [self.tableView reloadData];
         if (value) {
             [self.selectedSort removeAllObjects];
             [self.selectedSort addObject:[contents objectAtIndex:[indexPath row]]];
             [self.tableView reloadData];
-            NSLog(@"selected sort looks like %@", self.selectedSort);
             
             
         } else {
@@ -218,43 +246,33 @@ NSInteger kNumRowsForCategories = 4;
         }
         
     } else if ([key isEqualToString:@"Distance"]) {
-            NSLog(@"Flipping switch in distance");
-            
-            //[self.tableView reloadData];
             if (value) {
                 [self.selectedRadius removeAllObjects];
                 [self.selectedRadius addObject:[contents objectAtIndex:[indexPath row]]];
                 [self.tableView reloadData];
-                NSLog(@"selected radius looks like %@", self.selectedRadius);
                 
                 
             } else {
+                [self.selectedRadius removeObject:[contents objectAtIndex:[indexPath row]]];
+
                 
             }
     } else if ([key isEqualToString:@"Deals"]) {
-        NSLog(@"Flipping switch in Deals");
         
-        //[self.tableView reloadData];
         if (value) {
             [self.selectedDeal addObject:[contents objectAtIndex:[indexPath row]]];
-            //[self.tableView reloadData];
-            NSLog(@"selected radius deal looks like %@", self.selectedDeal);
             
             
         } else {
             [self.selectedDeal removeObject:[contents objectAtIndex:[indexPath row]]];
-            //[self.tableView reloadData];
-            NSLog(@"selected deal looks like %@", self.selectedDeal);
             
         }
         
         
     } else if ([key isEqualToString:@"Categories"]) {
         if (value) {
-            NSLog(@"Flipping switch in sort by");
-            NSLog(@"Selected categories are %@ and trying to add to it %@",self.selectedCategories, [contents objectAtIndex:[indexPath row]]);
+
             [self.selectedCategories addObject:[contents objectAtIndex:[indexPath row]]];
-            //    NSLog(@"%ld, %ld, %@",[indexPath section],[indexPath row], );
             
             
         }else {
@@ -280,14 +298,14 @@ NSInteger kNumRowsForCategories = 4;
 
 - (void)collapseSection:(NSInteger)section withRow: (NSInteger) row {
     //NSIndexPath *prevSelectionIndexPath;
-    switch (section) {
-        case 0:
-     //       prevSelectionIndexPath = [NSIndexPath indexPathForRow: inSection:section];
-            break;
-            
-        default:
-            break;
-    }
+//    switch (section) {
+//        case 0:
+//     //       prevSelectionIndexPath = [NSIndexPath indexPathForRow: inSection:section];
+//            break;
+//            
+//        default:
+//            break;
+//    }
     
     self.isExpandedSection[@(section)] = @NO;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -300,13 +318,6 @@ NSInteger kNumRowsForCategories = 4;
 - (NSDictionary * ) filters {
     NSMutableDictionary *filters = [NSMutableDictionary dictionary];
 
-//    [filters setObject:self.selectedSortType forKey:@"sort"];
-//    [filters setObject:self.selectedRadiusType forKey:@"radius_filter"];
-//    [filters setObject:self.selectedDealsType forKey:@"deals_filter"];
-
-    
-    
-//    [filters setObject:self.selectedRadius forKey:@"radius_filter"];
     
     for (NSDictionary *sort in self.selectedSort) {
         [filters setObject:sort[@"code"] forKey:@"sort"];
@@ -317,15 +328,9 @@ NSInteger kNumRowsForCategories = 4;
     }
     
     
-    
     if (self.selectedDeal.count > 0) {
         [filters setObject:@"1" forKey:@"deal"];
-        NSLog(@"setting deals inside filter initi");
-        
     }
-
-
-        
 
  
     if (self.selectedCategories.count > 0) {
@@ -351,20 +356,23 @@ NSInteger kNumRowsForCategories = 4;
 - (void) onApplyButton {
     
 
+    
     [self saveToDefault:self.selectedSort forKey:@"savedSelectedSort"];
     [self saveToDefault:self.selectedRadius forKey:@"savedSelectedRadius"];
     [self saveToDefault:self.selectedDeal forKey:@"savedSelectedDeal"];
     [self saveToDefault:self.selectedCategories forKey:@"savedSelectedCategories"];
 
+
     [self.delegate filtersViewController:self didChangeFilters:self.filters];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 -(void) saveToDefault:(id) filter forKey:(NSString*) forKey{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:filter];
     [defaults setObject:data forKey:forKey];
-    //[defaults synchronize];
+    [defaults synchronize];
 }
 
 -(id) getFromDefaults:(NSString*) forKey{
@@ -378,6 +386,7 @@ NSInteger kNumRowsForCategories = 4;
     }
     
 }
+
 
 @end
 
