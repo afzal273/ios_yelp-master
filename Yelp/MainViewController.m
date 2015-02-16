@@ -94,14 +94,11 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
-    NSLog(@"Search button clicked");
     NSString *query = self.searchBar.text;
-    [SVProgressHUD show];
-    [SVProgressHUD setBackgroundColor:[UIColor redColor]];
-    [SVProgressHUD showWithStatus:@"Loading"];
+    
+    [self showLoadingHUD];
     
     [self fetchBusinessesWithQuery:query params:nil];
-    //    [self ]
     [searchBar setShowsCancelButton:NO];
     [searchBar resignFirstResponder];
 }
@@ -155,7 +152,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
         NSArray *businessDictionaries = response[@"businesses"];
         self.businesses = [Business businessesWithDictionaies:businessDictionaries];
-            [SVProgressHUD dismiss];
+        [SVProgressHUD dismiss];
         [self.tableView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){

@@ -138,9 +138,6 @@ NSInteger knumRowsForCategories = 4;
         return 1;
     }
     
-    
-    
-    
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -148,7 +145,7 @@ NSInteger knumRowsForCategories = 4;
     SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SwitchCell"];
    
     cell.delegate = self;
-  //  SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
+    
     NSInteger section = indexPath.section;
 
     
@@ -161,18 +158,35 @@ NSInteger knumRowsForCategories = 4;
     cell.titleLabel.text = contents[indexPath.row][@"name"];
     
     switch (section) {
-        case 0: {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
+        case 0:
+        case 1:
+        {
             
             NSString *label;
-            for (NSDictionary *sort in self.selectedSort) {
-                label = sort[@"name"];
+            NSMutableSet *totest;
+            
+            
+            
+            
+            if (section == 0) {
+                totest = self.selectedSort;
+            } else if (section == 1) {
+                totest = self.selectedRadius;
             }
+            
+            if ([totest count] == 0) {
+                label = contents[0][@"name"];
+            } else {
+            
+                for (NSDictionary *sort in totest) {
+                    label = sort[@"name"];
+                }
+            }
+            
+            cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
 
             if ([self isExpandedSection:section]) {
                 cell.textLabel.text = contents[indexPath.row][@"name"];
-                NSLog(@"selected item and text box are %@ and %@", label, cell.textLabel.text);
-                
 
                 if ([label isEqualToString:cell.textLabel.text]) {
                     cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CheckMark20.png"]];
@@ -191,9 +205,7 @@ NSInteger knumRowsForCategories = 4;
             }
             
         }
-        case 1:
-            cell.on = [self.selectedRadius containsObject:[contents objectAtIndex:[indexPath row]]];
-                return cell;
+
         case 2:
             cell.on = [self.selectedDeal containsObject:[contents objectAtIndex:[indexPath row]]];
                 return cell;
@@ -202,8 +214,6 @@ NSInteger knumRowsForCategories = 4;
                 cell = [tableView dequeueReusableCellWithIdentifier:@"DefaultCell"];
                 cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CirclePlus20.png"]];
                 cell.textLabel.text = @"Show all Categories";
-                cell.textLabel.textAlignment = NSTextAlignmentCenter;
-                
                 return cell;
                 
 
@@ -265,32 +275,8 @@ NSInteger knumRowsForCategories = 4;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NSString *key = [[self.allFilters allFilters] objectAtIndex:[indexPath section]];
     NSArray *contents = [[self.allFilters allContents] objectForKey:key];
-    
-    
-    if ([key isEqualToString:@"Sort By"]) {
-        if (value) {
-            [self.selectedSort removeAllObjects];
-            [self.selectedSort addObject:[contents objectAtIndex:[indexPath row]]];
-            [self.tableView reloadData];
-            
-            
-        } else {
-            [self.selectedSort removeObject:[contents objectAtIndex:[indexPath row]]];
-        }
-        
-    } else if ([key isEqualToString:@"Distance"]) {
-            if (value) {
-                [self.selectedRadius removeAllObjects];
-                [self.selectedRadius addObject:[contents objectAtIndex:[indexPath row]]];
-                [self.tableView reloadData];
-                
-                
-            } else {
-                [self.selectedRadius removeObject:[contents objectAtIndex:[indexPath row]]];
 
-                
-            }
-    } else if ([key isEqualToString:@"Deals"]) {
+     if ([key isEqualToString:@"Deals"]) {
         
         if (value) {
             [self.selectedDeal addObject:[contents objectAtIndex:[indexPath row]]];
@@ -314,8 +300,6 @@ NSInteger knumRowsForCategories = 4;
         }
     }
     
-
-    
 }
 
 #pragma mark - Private Methods
@@ -330,7 +314,6 @@ NSInteger knumRowsForCategories = 4;
 }
 
 - (void)collapseSection:(NSInteger)section withRow: (NSInteger) row {
-    //NSIndexPath *prevSelectionIndexPath;
     
     NSString *sectionTitle = [[self.allFilters allFilters] objectAtIndex:section];
     
@@ -340,6 +323,11 @@ NSInteger knumRowsForCategories = 4;
         case 0:
             [self.selectedSort removeAllObjects];
             [self.selectedSort addObject:[contents objectAtIndex:row]];
+            break;
+            
+        case 1:
+            [self.selectedRadius removeAllObjects];
+            [self.selectedRadius addObject:[contents objectAtIndex:row]];
             break;
             
         default:
@@ -394,7 +382,6 @@ NSInteger knumRowsForCategories = 4;
 
 - (void) onApplyButton {
     
-
     
     [self saveToDefault:self.selectedSort forKey:@"savedSelectedSort"];
     [self saveToDefault:self.selectedRadius forKey:@"savedSelectedRadius"];

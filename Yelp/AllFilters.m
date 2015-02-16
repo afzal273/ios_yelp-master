@@ -25,7 +25,7 @@
     if (self) {
         self.allFilters = [NSMutableArray array];
         [self.allFilters addObject:@"Sort By"];
-        [self.allFilters addObject:@"Distance"];
+        [self.allFilters addObject:@"Radius"];
         [self.allFilters addObject:@"Deals"];
         [self.allFilters addObject:@"Categories"];
         
